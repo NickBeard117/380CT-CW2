@@ -4,15 +4,15 @@ from time import time
 
 class SSP():
     def __init__(self, S=[], t=0):
-        self.S = S
+        self.S = S #S is an array
         self.t = t
-        self.n = len(S)
-        #
+        """A doc string is in the code, comments aren't"""
+        self.n = len(S) 
         self.decision = False
         self.total    = 0
         self.selected = []
 
-    def __repr__(self):
+    def __repr__(self): #returns a printable representation of the object
         return "SSP instance: S="+str(self.S)+"\tt="+str(self.t)
     
     def random_instance(self, n, bitlength=10):
