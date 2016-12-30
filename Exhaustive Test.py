@@ -9,7 +9,7 @@ def subsetsum(bitlength, length):
     max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
     array = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted array
     target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
-    #target = sum(sample(array, randint(0,n)))
+    #target = sum(sample(array, randint(0,length)))
     
     start = timeit.default_timer()#start timer
     print (target, array) #print the target and array
