@@ -4,13 +4,19 @@ from random import randint
 import timeit
 
 
-def subsetsum(r, length, target):
-    array = sorted(random.sample(range(r), length)) #create an array between 0 and r
-    target = randint (0, target) #target can be between 0 and the target, comment this out to set the target specifically
-    #target =  round ((sum (array))/3)
+def subsetsum(bitlength, length):
 
-    start = timeit.default_timer()
+    max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
+    array = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted array
+    target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
+    
+    start = timeit.default_timer()#start timer
     print (target, array) #print the target and array
+
+    if target > sum(array):
+        print ("Target is greater than sum of array")
+        return 0
+    
     for i in range(0, len(array)+1):
         for subset in itertools.combinations(array, i): #for each subset
             print (subset)  #print the subset and the sum of it
@@ -19,9 +25,10 @@ def subsetsum(r, length, target):
                 stop = timeit.default_timer()
                 print (stop - start) 
                 return subset
-    print ("Target not found")  #if the target hasn't been found by the end of the iteration
+    print ("Target not found")  #if the target hasn't been found by the end of the iterations
     stop = timeit.default_timer()
-    print (stop - start) 
+    print (stop - start)
+    return 0
 
-#range of array ints from 0 to *, array length, target range from 0 to r     
-subsetsum(100,20,400)
+
+subsetsum(10,20)#bitlength and length of array
