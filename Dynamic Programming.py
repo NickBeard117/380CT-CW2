@@ -2,8 +2,8 @@ import random
 from random import randint
 import timeit
 
-array = sorted(random.sample(range(50), 25)) #create an array between 0 and r
-target = randint (0, 200) #target can be between 0 and the target, comment this out to set the target specifically
+array = sorted(random.sample(range(50), 25)) #create an array between 0 and *. CHANGE the first value to increase the range and the second value to increase the list size
+target = randint (0, 200) #target can be between * and the *
 print (array, target) #print the array and target
 
 start = timeit.default_timer() #start time
