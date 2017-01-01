@@ -2,50 +2,41 @@ import random
 from random import randint, sample
 import timeit
 
-n = 20
-bitlength = 10 #specify bit length
-max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
-array = sorted( [ randint(0,max_n_bit_number) for i in range(n) ])#create a random sorted array
-target = randint(0,n*max_n_bit_number) #create a random target
-#target = sum(sample(array, randint(0,n)))
+n = 10 #length of array
+bitlength = 10 #bit length
+max_n_bit_number = 2**bitlength-1 #the max bit length
+array = sorted([randint(0,max_n_bit_number) for i in range(n)])#create a random sorted array
 
-count = 0 #checking how many times it loops
-print (array, target) #print the array and target
+target = randint(0,n*max_n_bit_number) #create a random target
+#target = sum(sample(array, randint(0,n-1))) #create a target that will return true
+
+print ("Length of array: ",n, "Target: ", target,"\nArray: ",array)
+
 start = timeit.default_timer() #start time
 
-def dynamic(array, n, target, count):
+S = [[0 for x in range(n+1)] for y in range(target+1)]
+for i in range (n+1):
+    S[0][i] =1
+for i in range (1, target+1):
+    S[i][0] =0
 
-    for i in range (n):
-        count += 1
-        
-        #we add array[i] to each element of the array and the result is inc_array
-        inc_array = [x+array[i] for x in array]
-        #concatenate array and inc_array
-        array = (array + inc_array)    
+for i in range (1, target+1):
+    for j in range (1, n+1):
+        S[i][j] = S[i][j-1]
+        if (i >= array[j-1]):
+            S[i][j] = S[i][j] or S[i-array[j-1]][j-1]
+
+#for i in range (target+1):
+    #for j in range (n+1):
+      #print (S[i][j], end="")
+    #print (" ")
+
+if(S[target][n] == 1):
+    print ("Target Found")
+else:
+    print ("Target Not Found")
     
-        #if an array element is greater than the target, remove it
-        j=0
-        while j <(len(array)):
-            if array[j] > target:
-                del array [j]
-            else:
-                j+= 1
-
-        
-        #check the array to see if the target has been found
-        for k in range (len(array)):
-            if array[k] == target or target == 0:
-                print ('true')
-                print ("Iterations: ",count)
-                return 1
-           
-    print ("False. Iterations: ",count)
-    
-
-
-dynamic(array, n, target, count)
-
-stop = timeit.default_timer() #the stop time for the program
+stop = timeit.default_timer() #the stop time for the program    
 print (stop - start) #total runtime
 
 
