@@ -29,8 +29,8 @@ class SSP():
     def exhaustive (self):
         start = timeit.default_timer()#start timer
 
-        #if special_cases(self, start) == 0: #check for special cases
-           # return 0
+        if special_cases(self, start) == 0: #check for special cases
+            return 0
 
         for i in range(0, len(self.S)+1):
             for subset in itertools.combinations(self.S, i): #for each subset
