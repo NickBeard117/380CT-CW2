@@ -24,7 +24,13 @@ class SSP():
         self.length = len(self.S)
         print ("Length of set: ",self.length, "Target: ", self.target,"\nSet:\n",self.S)
 
-
+    def random_reverse_set (self,bitlength, length):
+        max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
+        self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
+        self.S.reverse()
+        self.target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
+        self.length = len(self.S)
+        #print ("Length of set: ",self.length, "Target: ", self.target,"\nSet:\n",self.S)
 
      
     def exhaustive (self):
@@ -45,12 +51,7 @@ class SSP():
         stop = timeit.default_timer()
         print (stop - start)
         return 0
-
-  
-            
-            
-        
-        
+    
     def dynamic (self):
         start = timeit.default_timer() #start time
 
@@ -85,6 +86,29 @@ class SSP():
             print ("Target Not Found")
             return 0
         
+    def greedy (self):
+        start = timeit.default_timer()#start timer
+        
+        #if special_cases(self, start) == 0: #check for special cases
+           # return 0
+        total = 0
+        used = []
+  
+        for i in range(0, len(self.S)):
+            if self.S[i] + total <= self.target:
+                total = total + self.S[i]
+                used.append(self.S[i])
+                
+        stop = timeit.default_timer()
+        
+        if self.target == 0:
+            print ("100,",stop - start)
+            return 1
+        #print ("This is the closest to the total using greedy: ", total)
+        #print ("Using these values: ", self.S)
+        print ((total/self.target)*100 ,",",stop - start)
+
+        
     def special_cases(self, start):
             #if the target is greater than the sum of the set, it cannot be exactly found
             if self.target > sum(self.S):
@@ -114,27 +138,6 @@ class SSP():
             
             #if all elements in the set are even, but the target is odd, it cannot be found
         
-    def greedy (self):
-        start = timeit.default_timer()#start timer
-        
-        #if special_cases(self, start) == 0: #check for special cases
-           # return 0
-        total = 0
-        used = []
-  
-        for i in range(0, len(self.S)):
-            if self.S[i] + total <= self.target:
-                total = total + self.S[i]
-                used.append(self.S[i])
-                
-        stop = timeit.default_timer()
-        
-        if self.target == 0:
-            print ("100,",stop - start)
-            return 1
-        #print ("This is the closest to the total using greedy: ", total)
-        #print ("Using these values: ", self.S)
-        print ((total/self.target)*100 ,",",stop - start)
 
 
 instance = SSP()
