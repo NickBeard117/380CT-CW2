@@ -107,15 +107,18 @@ class SSP():
 
         #print ("\nThis is the closest to the total using greedy: ", total)
         #print ("Using these values: ", self.S)
-        print ((total/self.target)*100 ,",",stop - start)
-
+        #print ((total/self.target)*100 ,",",stop - start)
+        print ((total/self.target)*100)
 
     def grasp (self):
         start = timeit.default_timer()#start timer
         
         #if instance.special_cases(start) == 0: #check for special cases
             #return 0
-            
+        if self.target == 0:
+            print ("100")
+            return 1
+        
         best = []
         
         for k in range (10000):
@@ -160,16 +163,14 @@ class SSP():
             #end of local search
             
             if abs(sum(grasp)-self.target) < abs(sum(best)-self.target):
-                print (best, sum(best))
+                #print (best, sum(best))
                 best = grasp[:]
            
         #stop = timeit.default_timer()
         #print (sum(best), self.target)
         #print (sum(grasp))
-        if ((sum(best)/self.target)*100)>100:
-            print(200-((sum(best)/self.target)*100))
-        else:
-            print((sum(best)/self.target)*100)
+    
+        print((sum(best)/self.target)*100)
         
     def special_cases(self, start):
             #if the target is greater than the sum of the set, it cannot be exactly found
@@ -210,8 +211,8 @@ instance = SSP()
 ##for i in range(40, 41):
 ##    print("n =", i)
 ##    print ("\n\n")
-for _ in range(1):
-    instance.random_set(10,25)
-    instance.grasp()
+for _ in range(1000):
+    instance.random_reverse_set(10,25)
+    instance.greedy()
        
 
