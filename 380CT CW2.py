@@ -226,16 +226,16 @@ class SSP():
         
 
 
-instance = SSP()
-instance.random_reverse_set(10,25)
-instance.greedy()
-instance.grasp()
+##instance = SSP()
+##instance.random_reverse_set(10,25)
+##instance.greedy()
+##instance.grasp()
 
-##for i in range(150, 201):
-##    print("\nn =", i)
-##    print ("\n\n")
-##    for _ in range(1000):
-##        instance.random_set(50,i)
-##        instance.grasp()
+for i in range(10, 31):
+    print("\nn =", i)
+    print ("\n\n")
+    for _ in range(100):
+        instance.random_set(50,i)
+        instance.grasp()
            
 
