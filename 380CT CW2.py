@@ -20,10 +20,11 @@ class SSP():
 
     def random_set (self,bitlength, length):
         max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
-        self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
-        self.target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
+        #self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
+        self.S =  [23, 150, 204, 231, 280, 332, 387, 497, 517, 593, 616, 719, 738, 768, 817, 818, 828, 845, 851, 913, 921, 929, 971, 1007, 1017]
+        self.target = 23237#randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
         self.length = len(self.S)
-        #print ("Length of set: ",self.length, "Target: ", self.target,"\nSet:\n",self.S)
+        print ("Length of set: ",self.length, "Target: ", self.target,"\nSet:\n",self.S)
 
     def random_reverse_set (self,bitlength, length):
         max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
@@ -91,7 +92,7 @@ class SSP():
         start = timeit.default_timer()#start timer
 
         if self.target == 0:
-            print ("100")
+            print ("100", end="")
             return 1
         
         total = 0
@@ -109,7 +110,7 @@ class SSP():
         #print ("\nThis is the closest to the total using greedy: ", total)
         #print ("Using these values: ", self.S)
         #print ((total/self.target)*100 ,",",stop - start)
-        print ((total/self.target)*100)
+        print ((total/self.target)*100, end=" , ")
 
     def grasp (self):
         start = timeit.default_timer()#start timer
@@ -120,7 +121,7 @@ class SSP():
         
         best = []
         
-        for k in range (1000):
+        for k in range (10000):
             array = self.S[:]
             j = 0
             greedy = []
@@ -136,15 +137,17 @@ class SSP():
                 else:
                     j += 1
                 
-            if abs(sum(greedy)-self.target) < abs(sum(best)-self.target):
+            if abs(self.target - sum(greedy)) < abs(self.target - sum(best)):
                 best = greedy[:]
+                #print ("greedied",best, sum(best))
+                
 
             #call local search here
             grasp = self.local_search(greedy,array)
             if grasp: #if the local search returned something
                 if abs(sum(grasp)-self.target) < abs(sum(best)-self.target):
-                    #print (best, sum(best))
                     best = grasp[:]
+                    #print ("grasped",best, sum(best))
              
 
         stop = timeit.default_timer()
@@ -157,8 +160,9 @@ class SSP():
             nd = []
             nu = []
             grasp = []
-            if (random.randint(0, 1)) == 1:
-                rnu = random.choice(greedy)
+            best = []
+            for i in range(len(greedy)):    
+                rnu = greedy[i]
                 nu = [x for x in array if x > rnu]
                 if nu:
                     nu = nu[0]
@@ -166,10 +170,15 @@ class SSP():
                     greedy.append(nu)
                     array.remove(nu)
                     grasp = greedy[:]
-                    return grasp
- 
-            else:
-                rnd = random.choice(greedy)
+                    if abs(self.target-sum(grasp)) < abs(self.target-sum(best)):
+                        best = grasp[:]
+                    greedy.append(rnu)
+                    greedy.remove(nu)
+                    array.append(nu)
+                    
+
+            for i in range(len(greedy)):
+                rnd = greedy[i]
                 nd = [x for x in array if x < rnd]
                 if nd:
                     nd = nd[len(nd)-1]
@@ -177,8 +186,13 @@ class SSP():
                     greedy.append(nd)
                     array.remove(nd)
                     grasp = greedy[:]
-                    return grasp
-            return 0
+                    if abs(self.target-sum(grasp)) < abs(self.target-sum(best)):
+                        best = grasp[:]
+                    greedy.append(rnd)
+                    greedy.remove(nd)
+                    array.append(nd)
+
+            return best
         
     def special_cases(self, start):
             #if the target is greater than the sum of the set, it cannot be exactly found
@@ -213,14 +227,15 @@ class SSP():
 
 
 instance = SSP()
-##instance.random_set(10,25)
-##instance.grasp()
+instance.random_reverse_set(10,25)
+instance.greedy()
+instance.grasp()
 
-for i in range(150, 201):
-    print("\nn =", i)
-    print ("\n\n")
-    for _ in range(1000):
-        instance.random_set(50,i)
-        instance.grasp()
+##for i in range(150, 201):
+##    print("\nn =", i)
+##    print ("\n\n")
+##    for _ in range(1000):
+##        instance.random_set(50,i)
+##        instance.grasp()
            
 
