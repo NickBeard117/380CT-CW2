@@ -89,9 +89,10 @@ class SSP():
         
     def greedy (self):
         start = timeit.default_timer()#start timer
-        
-        #if instance.special_cases(start) == 0: #check for special cases
-           #return 0
+
+        if self.target == 0:
+            print ("100")
+            return 1
         
         total = 0
         candidate = []
@@ -112,22 +113,19 @@ class SSP():
 
     def grasp (self):
         start = timeit.default_timer()#start timer
-        
-        #if instance.special_cases(start) == 0: #check for special cases
-            #return 0
+
         if self.target == 0:
             print ("100")
             return 1
         
         best = []
         
-        for k in range (10000):
+        for k in range (1000):
             array = self.S[:]
             j = 0
             greedy = []
             grasp = []
-            nd = []
-            nu = []
+
 
             #this section creates the greedy array
             while j < len(array):
@@ -138,39 +136,49 @@ class SSP():
                 else:
                     j += 1
                 
-            if sum(best) == 0:
+            if abs(sum(greedy)-self.target) < abs(sum(best)-self.target):
                 best = greedy[:]
 
-            #local search here
+            #call local search here
+            grasp = self.local_search(greedy,array)
+            if grasp: #if the local search returned something
+                if abs(sum(grasp)-self.target) < abs(sum(best)-self.target):
+                    #print (best, sum(best))
+                    best = grasp[:]
+             
+
+        stop = timeit.default_timer()
+        #print (sum(best), self.target)
+        #print (sum(grasp))
+    
+        print((sum(best)/self.target)*100)
+
+    def local_search(self, greedy, array):
+            nd = []
+            nu = []
+            grasp = []
             if (random.randint(0, 1)) == 1:
                 rnu = random.choice(greedy)
                 nu = [x for x in array if x > rnu]
-                if len(nu) > 0:
+                if nu:
                     nu = nu[0]
                     greedy.remove(rnu)
                     greedy.append(nu)
                     array.remove(nu)
-                    grasp = greedy[:]                
+                    grasp = greedy[:]
+                    return grasp
+ 
             else:
                 rnd = random.choice(greedy)
                 nd = [x for x in array if x < rnd]
-                if len(nd) > 0:
+                if nd:
                     nd = nd[len(nd)-1]
                     greedy.remove(rnd)
                     greedy.append(nd)
                     array.remove(nd)
                     grasp = greedy[:]
-            #end of local search
-            
-            if abs(sum(grasp)-self.target) < abs(sum(best)-self.target):
-                #print (best, sum(best))
-                best = grasp[:]
-           
-        #stop = timeit.default_timer()
-        #print (sum(best), self.target)
-        #print (sum(grasp))
-    
-        print((sum(best)/self.target)*100)
+                    return grasp
+            return 0
         
     def special_cases(self, start):
             #if the target is greater than the sum of the set, it cannot be exactly found
@@ -205,14 +213,14 @@ class SSP():
 
 
 instance = SSP()
-##instance.random_reverse_set(10,25)
+##instance.random_set(10,25)
 ##instance.grasp()
 
-##for i in range(40, 41):
-##    print("n =", i)
-##    print ("\n\n")
-for _ in range(1000):
-    instance.random_reverse_set(10,25)
-    instance.greedy()
-       
+for i in range(150, 201):
+    print("\nn =", i)
+    print ("\n\n")
+    for _ in range(1000):
+        instance.random_set(50,i)
+        instance.grasp()
+           
 
