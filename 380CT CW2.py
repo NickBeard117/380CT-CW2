@@ -5,21 +5,21 @@ import timeit
 import bisect
 
 class SSP():
-
+    #initialise the values so that all functions can use them
     def __init__(self, S=[], target=0):
         self.S = S
         self.target = target
         self.length = len(S)
 
     def random_true_set (self,bitlength, length):
-        max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
+        max_n_bit_number = 2**bitlength-1 #the max bit length is 2**bitlength-1
         self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
         self.target = sum(sample(self.S, randint(0,length)))
         self.length = len(self.S)
         #print ("Length of set: ",self.length, "Target: ", self.target,"\nSet: ",self.S)
 
     def random_set (self,bitlength, length):
-        max_n_bit_number = 2**bitlength-1 #the max bit length is 2*bitlength-1
+        max_n_bit_number = 2**bitlength-1 #the max bit length is 2**bitlength-1
         self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
         self.target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
         self.length = len(self.S)
@@ -28,7 +28,7 @@ class SSP():
     def random_reverse_set (self,bitlength, length):
         max_n_bit_number = 2**bitlength-1 #the max bit length is 2**bitlength-1
         self.S = sorted( [ randint(0,max_n_bit_number) for i in range(length) ])#create a random sorted S
-        self.S.reverse()
+        self.S.reverse() #reverse it
         self.target = randint(0,length*max_n_bit_number) #target is between 0 and the length*maxbitnumber
         self.length = len(self.S)
         #print ("Length of set: ",self.length, "Target: ", self.target,"\nSet:\n",self.S)
@@ -59,6 +59,7 @@ class SSP():
         if instance.special_cases(start) == 0: #check for special cases
             return 0
         
+        #create the table
         S = [[0 for x in range(self.length+1)] for y in range(self.target+1)]
         for i in range (self.length+1):
             S[0][i] =1
@@ -98,6 +99,7 @@ class SSP():
         candidate = []
         used = []
   
+        #check each item in the set, if it fits, use it, if not, check next item
         for i in range(0, len(self.S)):
             if self.S[i] + total <= self.target:
                 total = total + self.S[i]
@@ -114,7 +116,7 @@ class SSP():
 
 
 
-
+    #randomised greedy
     def grasp (self,neigh):
         start = timeit.default_timer()#start timer
 
@@ -156,7 +158,8 @@ class SSP():
         stop = timeit.default_timer()
         #print (sum(best), self.target)
         #print (sum(grasp))
-
+        
+        #print out accuracy
         temp = sum(best)/self.target*100
         if temp <= 100:
             print (temp, end=" , ")
@@ -207,6 +210,8 @@ class SSP():
         stop = timeit.default_timer()
         #print (sum(best), self.target)
         #print (sum(grasp))
+        
+        #print out accuracy
         temp = sum(best)/self.target*100
         if temp <= 100:
             print (temp)
@@ -309,7 +314,7 @@ class SSP():
     
 
     
-##    def wiki(self, c):
+##    def aprox(self, c):
 ##        start = timeit.default_timer()#start timer
 ##
 ##        
@@ -371,12 +376,7 @@ class SSP():
                 stop = timeit.default_timer()
                 print (stop - start)
                 return 0
-            
-            #if all elements in the set are even, but the target is odd, it cannot be found
-        
-
-            #the sum of the set could be equal to the target
-            #if 
+           
             
 instance = SSP()
 ##instance.random_reverse_set(20,100)
